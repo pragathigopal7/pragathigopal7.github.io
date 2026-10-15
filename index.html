@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pragathi Gopal | Senior Software Engineer</title>
+<meta name="description" content="Pragathi Gopal is a senior software engineer building backend, data, and platform systems with Java, Go, Python, Kafka, and Kubernetes.">
+<meta property="og:title" content="Pragathi Gopal | Senior Software Engineer">
+<meta property="og:description" content="Backend, data, and platform engineering. Java, Go, Python, Kafka, Kubernetes, AWS, Azure.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #EEF2F6;
+  --surface: #FFFFFF;
+  --ink: #14213D;
+  --muted: #56657C;
+  --line: #CDD6E2;
+  --cobalt: #1F5FBF;
+  --saffron: #E8A33D;
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --body: "Newsreader", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0F1A2E;
+    --surface: #16233B;
+    --ink: #E6ECF5;
+    --muted: #9AA9C0;
+    --line: #2A3A57;
+    --cobalt: #7FA8EC;
+    --saffron: #F0B65C;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.1875rem/1.62 var(--body);
+  font-optical-sizing: auto;
+}
+a { color: var(--cobalt); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--saffron); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* nav */
+.top {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-top: 28px; font-family: var(--display); font-size: 1rem;
+}
+.top .name { font-weight: 800; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.top nav { display: flex; gap: 22px; }
+.top nav a { color: var(--muted); text-decoration: none; }
+.top nav a:hover { color: var(--ink); }
+
+/* hero */
+.hero {
+  display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center;
+  padding: 88px 0 96px;
+}
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 6.2vw, 4.9rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  margin: 0 0 28px;
+  text-wrap: balance;
+}
+.hero .lede { font-size: 1.3125rem; max-width: 34em; margin: 0 0 32px; color: var(--ink); }
+.actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.btn {
+  font-family: var(--display); font-weight: 600; font-size: 1rem;
+  padding: 12px 22px; border-radius: 999px; text-decoration: none;
+  border: 2px solid var(--ink);
+}
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.secondary { color: var(--ink); }
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+
+/* pipeline figure: the one moving thing on the page */
+.flow { width: 100%; height: auto; display: block; }
+.flow .node { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.flow .topic { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+.flow .part { stroke: var(--line); stroke-width: 1.5; }
+.flow .wire { fill: none; stroke: var(--line); stroke-width: 2; }
+.flow text { font-family: var(--display); font-size: 15px; fill: var(--muted); }
+.flow .tname { fill: var(--ink); font-weight: 600; }
+.flow .pkt { fill: var(--saffron); }
+.flow .pkt.b { fill: var(--cobalt); }
+.flow-cap { font-size: 0.95rem; color: var(--muted); margin: 12px 0 0; font-style: italic; }
+
+/* sections */
+section { padding: 72px 0; border-top: 1px solid var(--line); }
+.sec { display: grid; grid-template-columns: 220px 1fr; gap: 40px; }
+.sec h2 {
+  font-family: var(--display); font-weight: 800; font-size: 1.75rem;
+  letter-spacing: -0.02em; line-height: 1.1; margin: 0;
+}
+.sec .body { max-width: 44rem; }
+.sec .body > p:first-child { margin-top: 0; }
+
+/* projects */
+.proj { padding: 0 0 36px; margin: 0 0 36px; border-bottom: 1px solid var(--line); }
+.proj:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.proj h3 {
+  font-family: var(--display); font-weight: 600; font-size: 1.5rem;
+  letter-spacing: -0.015em; margin: 0 0 8px; line-height: 1.2;
+}
+.proj h3 a { color: var(--ink); text-decoration: none; }
+.proj h3 a:hover { color: var(--cobalt); text-decoration: underline; }
+.proj p { margin: 0 0 12px; }
+.stack { font-family: var(--display); font-size: 0.95rem; color: var(--muted); margin: 0; }
+
+/* experience */
+.roles { list-style: none; padding: 0; margin: 0; }
+.roles li { padding: 0 0 26px; }
+.roles li:last-child { padding-bottom: 0; }
+.roles .org { font-family: var(--display); font-weight: 600; font-size: 1.25rem; display: block; }
+.roles .role { color: var(--muted); font-style: italic; display: block; margin-bottom: 4px; }
+.roles p { margin: 0; }
+
+.skills { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 10px 24px; }
+.skills dt { font-family: var(--display); font-weight: 600; }
+.skills dd { margin: 0; }
+
+.talk { margin: 0 0 22px; }
+.talk:last-child { margin-bottom: 0; }
+.talk strong { font-family: var(--display); font-weight: 600; font-size: 1.15rem; display: block; }
+
+/* contact */
+.contact h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); }
+.contact .mail {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(1.3rem, 3.2vw, 2rem); letter-spacing: -0.01em;
+}
+.links { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 20px; font-family: var(--display); }
+
+footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-top: 1px solid var(--line); }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; padding: 56px 0 64px; gap: 40px; }
+  .sec { grid-template-columns: 1fr; gap: 20px; }
+  section { padding: 56px 0; }
+  .top nav { display: none; }
+}
+@media (max-width: 480px) {
+  .wrap { padding: 0 16px; }
+  .skills { grid-template-columns: 1fr; gap: 2px; }
+  .skills dd { margin-bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow .pkt { display: none; }
+  .btn:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="name" href="#">Pragathi Gopal</a>
+    <nav aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#speaking">Speaking</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>I build the backend systems that keep data moving.</h1>
+        <p class="lede">I'm a senior software engineer with seven years in backend and platform engineering: event driven services on Kafka, APIs in Java, Go, and Python, and the Kubernetes and cloud infrastructure underneath them. Lately I've been building LLM infrastructure and evaluation tooling.</p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:pragu.gopal@gmail.com">Email me</a>
+          <a class="btn secondary" href="https://github.com/pragathigopal7">See my GitHub</a>
+        </div>
+      </div>
+
+      <figure style="margin:0">
+        <svg class="flow" viewBox="0 0 480 340" role="img" aria-labelledby="flow-title">
+          <title id="flow-title">Diagram of events flowing from three producers through a partitioned topic to two consumers</title>
+          <!-- wires -->
+          <path id="w1" class="wire" d="M110 60 C 160 60, 160 130, 200 150"/>
+          <path id="w2" class="wire" d="M110 170 L 200 170"/>
+          <path id="w3" class="wire" d="M110 280 C 160 280, 160 210, 200 190"/>
+          <path id="w4" class="wire" d="M300 155 C 340 140, 330 95, 370 95"/>
+          <path id="w5" class="wire" d="M300 185 C 340 200, 330 245, 370 245"/>
+          <!-- producers -->
+          <rect class="node" x="14" y="38" width="96" height="44" rx="10"/>
+          <text x="62" y="65" text-anchor="middle">orders</text>
+          <rect class="node" x="14" y="148" width="96" height="44" rx="10"/>
+          <text x="62" y="175" text-anchor="middle">payments</text>
+          <rect class="node" x="14" y="258" width="96" height="44" rx="10"/>
+          <text x="62" y="285" text-anchor="middle">inventory</text>
+          <!-- topic with partitions -->
+          <rect class="topic" x="200" y="120" width="100" height="100" rx="12"/>
+          <line class="part" x1="200" y1="153" x2="300" y2="153"/>
+          <line class="part" x1="200" y1="187" x2="300" y2="187"/>
+          <text class="tname" x="250" y="245" text-anchor="middle">topic</text>
+          <!-- consumers -->
+          <rect class="node" x="370" y="73" width="100" height="44" rx="10"/>
+          <text x="420" y="100" text-anchor="middle">lakehouse</text>
+          <rect class="node" x="370" y="223" width="100" height="44" rx="10"/>
+          <text x="420" y="250" text-anchor="middle">services</text>
+          <!-- packets -->
+          <circle class="pkt" r="6"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#w1"/></animateMotion></circle>
+          <circle class="pkt" r="6"><animateMotion dur="2.6s" begin="-0.9s" repeatCount="indefinite"><mpath href="#w2"/></animateMotion></circle>
+          <circle class="pkt" r="6"><animateMotion dur="2.6s" begin="-1.7s" repeatCount="indefinite"><mpath href="#w3"/></animateMotion></circle>
+          <circle class="pkt b" r="6"><animateMotion dur="2.2s" begin="-0.4s" repeatCount="indefinite"><mpath href="#w4"/></animateMotion></circle>
+          <circle class="pkt b" r="6"><animateMotion dur="2.2s" begin="-1.4s" repeatCount="indefinite"><mpath href="#w5"/></animateMotion></circle>
+        </svg>
+        <figcaption class="flow-cap">Most of my work lives in the middle of a diagram like this one.</figcaption>
+      </figure>
+    </div>
+
+    <section id="work">
+      <div class="sec">
+        <h2>Selected work</h2>
+        <div class="body">
+          <article class="proj">
+            <h3><a href="https://github.com/pragathigopal7/retail-data-pipeline">Retail data pipeline</a></h3>
+            <p>A streaming orders pipeline that takes events from Kafka, enforces a schema contract at the edge, and builds bronze, silver, and gold tables in DuckDB over Parquet. It handles duplicate deliveries, late events, and malformed payloads, and quality gates stop a bad feed before it reaches analytics.</p>
+            <p class="stack">Python, Kafka (Redpanda), DuckDB, Parquet, Pydantic, GitHub Actions</p>
+          </article>
+          <article class="proj">
+            <h3><a href="https://github.com/pragathigopal7/Bedrock">Codebase Q&amp;A agent on Amazon Bedrock AgentCore</a></h3>
+            <p>An agent that answers questions about a Java Spring Boot codebase and cites file and line references for every claim, built for engineers working through legacy migrations. The focus is measuring accuracy: retrieval is evaluated live, and a local demo runs offline or against a local model.</p>
+            <p class="stack">Python, Amazon Bedrock AgentCore, Strands Agents SDK, Ollama</p>
+          </article>
+          <article class="proj">
+            <h3><a href="https://github.com/pragathigopal7/llm-eval-harness">LLM eval harness</a></h3>
+            <p>A dependency free Python harness that runs a model over a test set, scores each answer with reference metrics or an LLM judge, tracks latency, tokens, and cost, and fails CI when a prompt or model change makes results worse.</p>
+            <p class="stack">Python standard library, Anthropic and OpenAI compatible APIs</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="sec">
+        <h2>Experience</h2>
+        <div class="body">
+          <ul class="roles">
+            <li>
+              <span class="org">LinkedIn</span>
+              <span class="role">AI Trainer</span>
+              <p>Evaluating and annotating model outputs to improve model quality.</p>
+            </li>
+            <li>
+              <span class="org">Walmart Global Tech</span>
+              <span class="role">Senior Software Engineer; System and Infrastructure Engineer III</span>
+              <p>Built backend services for the Walmart+ membership benefits platform, including the streaming integrations with Peacock and Paramount+. Built endpoint security automation as Palo Alto Networks Cortex XSOAR playbooks.</p>
+            </li>
+            <li>
+              <span class="org">Kaiser Permanente</span>
+              <span class="role">Software engineering</span>
+            </li>
+            <li>
+              <span class="org">Intel</span>
+              <span class="role">Software engineering</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="sec">
+        <h2>Tools I reach for</h2>
+        <div class="body">
+          <dl class="skills">
+            <dt>Languages</dt><dd>Java, Go, Python, SQL</dd>
+            <dt>Backend</dt><dd>Spring Boot, REST and event driven APIs, Kafka</dd>
+            <dt>Platform</dt><dd>Kubernetes, Docker, AWS, Azure, CI/CD</dd>
+            <dt>Data</dt><dd>Streaming pipelines, Parquet, DuckDB, data quality checks</dd>
+            <dt>AI</dt><dd>LLM evaluation, semantic caching, agents, MCP</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="speaking">
+      <div class="sec">
+        <h2>Speaking and research</h2>
+        <div class="body">
+          <div class="talk">
+            <strong>Boosting LLM Performance &amp; Semantic Caching</strong>
+            Guest speaker, AI @ Walmart Global Tech
+          </div>
+          <div class="talk">
+            <strong>Agentic API architectures, MCP, and enterprise LLM infrastructure</strong>
+            Technical sessions at API World and AI TechWorld, Santa Clara
+          </div>
+          <div class="talk">
+            <strong>NASA Psyche mission</strong>
+            Wrote a Python tool that calculates observation footprints on the target asteroid and contributed to the NASA Goddard footprint toolbox.
+          </div>
+          <div class="talk">
+            <strong>National Science Foundation research, ASU eLab</strong>
+            Applied machine learning to multimodal sensor data.
+          </div>
+          <p style="margin-top:28px">MS in Electrical Engineering and Computer Sciences, UC Berkeley. BS, Arizona State University. Member of Toastmasters.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact">
+      <div class="sec">
+        <h2>Say hello</h2>
+        <div class="body">
+          <p>I'm based in the Bay Area and open to senior backend, platform, and data engineering roles. The fastest way to reach me is email.</p>
+          <a class="mail" href="mailto:pragu.gopal@gmail.com">pragu.gopal@gmail.com</a>
+          <div class="links">
+            <a href="https://www.linkedin.com/in/prag-gopal">LinkedIn</a>
+            <a href="https://github.com/pragathigopal7">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Pragathi Gopal. Built by hand and hosted on GitHub Pages.</footer>
+</div>
+</body>
+</html>
