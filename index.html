@@ -233,6 +233,11 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             <p class="stack">Python, Kafka (Redpanda), DuckDB, Parquet, Pydantic, GitHub Actions</p>
           </article>
           <article class="proj">
+            <h3><a href="https://github.com/pragathigopal7/orders-api">Orders API in Go</a></h3>
+            <p>A REST service for a product catalog, inventory, and the order lifecycle. Idempotency keys make retried orders safe even when they arrive at the same time, stock is reserved inside one transaction so nothing oversells, and a transactional outbox delivers events at least once and in order per order. Keyset pagination keeps lists stable while data changes.</p>
+            <p class="stack">Go standard library, PostgreSQL, JWT, OpenAPI 3.1, Docker, Kubernetes (Kustomize), GitHub Actions</p>
+          </article>
+          <article class="proj">
             <h3><a href="https://github.com/pragathigopal7/Bedrock">Codebase Q&amp;A agent on Amazon Bedrock AgentCore</a></h3>
             <p>An agent that answers questions about a Java Spring Boot codebase and cites file and line references for every claim, built for engineers working through legacy migrations. The focus is measuring accuracy: retrieval is evaluated live, and a local demo runs offline or against a local model.</p>
             <p class="stack">Python, Amazon Bedrock AgentCore, Strands Agents SDK, Ollama</p>
