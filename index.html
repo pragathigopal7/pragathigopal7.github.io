@@ -49,6 +49,16 @@ a { color: var(--cobalt); text-underline-offset: 0.18em; text-decoration-thickne
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 3px solid var(--saffron); outline-offset: 3px; border-radius: 2px; }
 
+.skip {
+  position: absolute; left: 16px; top: -48px; z-index: 10;
+  background: var(--ink); color: var(--paper); padding: 8px 14px; border-radius: 8px;
+  font-family: var(--display); text-decoration: none;
+}
+.skip:focus { top: 12px; }
+section[id] { scroll-margin-top: 24px; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
 /* nav */
@@ -150,7 +160,8 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
   .hero { grid-template-columns: 1fr; padding: 56px 0 64px; gap: 40px; }
   .sec { grid-template-columns: 1fr; gap: 20px; }
   section { padding: 56px 0; }
-  .top nav { display: none; }
+  .top { flex-direction: column; gap: 10px; }
+  .top nav { flex-wrap: wrap; gap: 6px 18px; }
 }
 @media (max-width: 480px) {
   .wrap { padding: 0 16px; }
@@ -164,6 +175,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
   <header class="top">
     <a class="name" href="#">Pragathi Gopal</a>
@@ -175,7 +187,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
     </nav>
   </header>
 
-  <main>
+  <main id="main">
     <div class="hero">
       <div>
         <h1>I build the backend systems that keep data moving.</h1>
