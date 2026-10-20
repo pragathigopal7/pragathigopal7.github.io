@@ -79,16 +79,22 @@ a:hover { text-decoration-thickness: 2px; }
   font-family: var(--display); text-decoration: none;
 }
 .skip:focus { top: 12px; }
-section[id] { scroll-margin-top: 24px; }
+section[id] { scroll-margin-top: 80px; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
 /* nav */
+.bar {
+  position: sticky; top: 0; z-index: 5;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+}
 .top {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding-top: 28px; font-family: var(--display); font-size: 1rem;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 0; font-family: var(--display); font-size: 1rem;
 }
 .top .name { font-weight: 800; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
 .top nav { display: flex; gap: 22px; }
@@ -98,7 +104,7 @@ html { scroll-behavior: smooth; }
 /* hero */
 .hero {
   display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center;
-  padding: 88px 0 96px;
+  padding: 64px 0 80px;
 }
 .hero h1 {
   font-family: var(--display);
@@ -134,19 +140,25 @@ html { scroll-behavior: smooth; }
 
 /* sections */
 section { padding: 72px 0; border-top: 1px solid var(--line); }
-.sec { display: grid; grid-template-columns: 220px 1fr; gap: 40px; }
+.sec { display: block; }
 .sec h2 {
   font-family: var(--display); font-weight: 800; font-size: 1.75rem;
-  letter-spacing: -0.02em; line-height: 1.1; margin: 0;
+  letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 32px;
 }
-.sec .body { max-width: 44rem; }
+.sec .body { max-width: none; }
+.narrow { max-width: 44rem; }
 .sec .body > p:first-child { margin-top: 0; }
 
 /* projects */
-.proj { padding: 0 0 36px; margin: 0 0 36px; border-bottom: 1px solid var(--line); }
-.proj:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.proj {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+  padding: 28px; display: flex; flex-direction: column;
+}
+.proj .stack { margin-top: auto; padding-top: 8px; }
+.proj p { font-size: 1.0625rem; }
 .proj h3 {
-  font-family: var(--display); font-weight: 600; font-size: 1.5rem;
+  font-family: var(--display); font-weight: 600; font-size: 1.35rem;
   letter-spacing: -0.015em; margin: 0 0 8px; line-height: 1.2;
 }
 .proj h3 a { color: var(--ink); text-decoration: none; }
@@ -155,19 +167,28 @@ section { padding: 72px 0; border-top: 1px solid var(--line); }
 .stack { font-family: var(--display); font-size: 0.95rem; color: var(--muted); margin: 0; }
 
 /* experience */
-.roles { list-style: none; padding: 0; margin: 0; }
-.roles li { padding: 0 0 26px; }
+.roles { list-style: none; padding: 0 0 0 28px; margin: 0; border-left: 2px solid var(--line); max-width: 44rem; }
+.roles li { padding: 0 0 30px; position: relative; }
+.roles li::before {
+  content: ""; position: absolute; left: -36px; top: 0.45em;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--paper); border: 3px solid var(--cobalt);
+}
 .roles li:last-child { padding-bottom: 0; }
 .roles .org { font-family: var(--display); font-weight: 600; font-size: 1.25rem; display: block; }
 .roles .role { color: var(--muted); font-style: italic; display: block; margin-bottom: 4px; }
 .roles p { margin: 0; }
 
-.skills { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 10px 24px; }
+.skills { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 14px 28px; align-items: center; }
 .skills dt { font-family: var(--display); font-weight: 600; }
-.skills dd { margin: 0; }
+.skills dd { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-family: var(--display); font-size: 0.9rem; padding: 4px 12px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+}
 
-.talk { margin: 0 0 22px; }
-.talk:last-child { margin-bottom: 0; }
+.talks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.talk { border-left: 3px solid var(--saffron); padding: 4px 0 4px 18px; font-size: 1.0625rem; }
 .talk strong { font-family: var(--display); font-weight: 600; font-size: 1.15rem; display: block; }
 
 /* contact */
@@ -180,17 +201,23 @@ section { padding: 72px 0; border-top: 1px solid var(--line); }
 
 footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-top: 1px solid var(--line); }
 
+.contact .body { text-align: center; }
+.contact .narrow { margin: 0 auto; }
+.contact .links { justify-content: center; }
+.contact h2 { text-align: center; }
+
 @media (max-width: 860px) {
-  .hero { grid-template-columns: 1fr; padding: 56px 0 64px; gap: 40px; }
-  .sec { grid-template-columns: 1fr; gap: 20px; }
+  .hero { grid-template-columns: 1fr; padding: 40px 0 56px; gap: 40px; }
+  .grid, .talks { grid-template-columns: 1fr; }
   section { padding: 56px 0; }
-  .top { flex-direction: column; gap: 10px; }
-  .top nav { flex-wrap: wrap; gap: 6px 18px; }
+  .top nav { flex-wrap: wrap; gap: 6px 16px; }
 }
 @media (max-width: 480px) {
   .wrap { padding: 0 16px; }
-  .skills { grid-template-columns: 1fr; gap: 2px; }
-  .skills dd { margin-bottom: 12px; }
+  .skills { grid-template-columns: 1fr; gap: 6px; }
+  .skills dd { margin-bottom: 14px; }
+  .top { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 0; }
+  .proj { padding: 22px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .flow .pkt { display: none; }
@@ -200,7 +227,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="wrap">
+<div class="bar"><div class="wrap">
   <header class="top">
     <a class="name" href="#">Pragathi Gopal</a>
     <nav aria-label="Sections">
@@ -210,6 +237,8 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
       <a href="#contact">Contact</a>
     </nav>
   </header>
+</div></div>
+<div class="wrap">
 
   <main id="main">
     <div class="hero">
@@ -262,7 +291,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
     <section id="work">
       <div class="sec">
         <h2>Selected work</h2>
-        <div class="body">
+        <div class="body grid">
           <article class="proj">
             <h3><a href="https://github.com/pragathigopal7/retail-data-pipeline">Retail data pipeline</a></h3>
             <p>A streaming orders pipeline that takes events from Kafka, enforces a schema contract at the edge, and builds bronze, silver, and gold tables in DuckDB over Parquet. It handles duplicate deliveries, late events, and malformed payloads, and quality gates stop a bad feed before it reaches analytics.</p>
@@ -320,11 +349,11 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
         <h2>Tools I reach for</h2>
         <div class="body">
           <dl class="skills">
-            <dt>Languages</dt><dd>Java, Go, Python, SQL</dd>
-            <dt>Backend</dt><dd>Spring Boot, REST and event driven APIs, Kafka</dd>
-            <dt>Platform</dt><dd>Kubernetes, Docker, AWS, Azure, CI/CD</dd>
-            <dt>Data</dt><dd>Streaming pipelines, Parquet, DuckDB, data quality checks</dd>
-            <dt>AI</dt><dd>LLM evaluation, semantic caching, agents, MCP</dd>
+            <dt>Languages</dt><dd><span class="chip">Java</span><span class="chip">Go</span><span class="chip">Python</span><span class="chip">SQL</span></dd>
+            <dt>Backend</dt><dd><span class="chip">Spring Boot</span><span class="chip">REST and event driven APIs</span><span class="chip">Kafka</span></dd>
+            <dt>Platform</dt><dd><span class="chip">Kubernetes</span><span class="chip">Docker</span><span class="chip">AWS</span><span class="chip">Azure</span><span class="chip">CI/CD</span></dd>
+            <dt>Data</dt><dd><span class="chip">Streaming pipelines</span><span class="chip">Parquet</span><span class="chip">DuckDB</span><span class="chip">data quality checks</span></dd>
+            <dt>AI</dt><dd><span class="chip">LLM evaluation</span><span class="chip">semantic caching</span><span class="chip">agents</span><span class="chip">MCP</span></dd>
           </dl>
         </div>
       </div>
@@ -334,6 +363,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
       <div class="sec">
         <h2>Speaking and research</h2>
         <div class="body">
+          <div class="talks">
           <div class="talk">
             <strong>Boosting LLM Performance &amp; Semantic Caching</strong>
             Guest speaker, AI @ Walmart Global Tech
@@ -350,7 +380,8 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             <strong>National Science Foundation research, ASU eLab</strong>
             Applied machine learning to multimodal sensor data.
           </div>
-          <p style="margin-top:28px">MS in Electrical Engineering and Computer Sciences, UC Berkeley. BS, Arizona State University. Member of Toastmasters.</p>
+          </div>
+          <p style="margin-top:32px">MS in Electrical Engineering and Computer Sciences, UC Berkeley. BS, Arizona State University. Member of Toastmasters.</p>
         </div>
       </div>
     </section>
@@ -359,7 +390,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
       <div class="sec">
         <h2>Say hello</h2>
         <div class="body">
-          <p>I'm based in the Bay Area and open to senior backend, platform, and data engineering roles. The fastest way to reach me is email.</p>
+          <div class="narrow"><p>I'm based in the Bay Area and open to senior backend, platform, and data engineering roles. The fastest way to reach me is email.</p></div>
           <a class="mail" href="mailto:pragu.gopal@gmail.com">pragu.gopal@gmail.com</a>
           <div class="links">
             <a href="https://www.linkedin.com/in/prag-gopal">LinkedIn</a>
