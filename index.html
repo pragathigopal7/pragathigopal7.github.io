@@ -9,7 +9,12 @@
 <meta property="og:description" content="Backend, data, and platform engineering. Java, Go, Python, Kafka, Kubernetes, AWS, Azure.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pragathigopal.com/">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://pragathigopal.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pragathi Gopal, senior software engineer, with a diagram of events flowing through a partitioned topic">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pragathigopal.com/og.png">
 <link rel="canonical" href="https://pragathigopal.com/">
 <meta name="theme-color" content="#EEF2F6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1A2E" media="(prefers-color-scheme: dark)">
@@ -45,6 +50,11 @@
   --line: #CDD6E2;
   --cobalt: #1F5FBF;
   --saffron: #E8A33D;
+  --teal: #1E8C78;
+  --stop: #C4452F;
+  --bronze: #B87333;
+  --silver: #8E9AAB;
+  --gold: #CFA01C;
   --display: "Bricolage Grotesque", system-ui, sans-serif;
   --body: "Newsreader", Georgia, serif;
 }
@@ -57,11 +67,14 @@
     --line: #2A3A57;
     --cobalt: #7FA8EC;
     --saffron: #F0B65C;
+    --teal: #4CC2A8;
+    --stop: #EE7B66;
   }
 }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   margin: 0;
   background: var(--paper);
@@ -80,8 +93,6 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .skip:focus { top: 12px; }
 section[id] { scroll-margin-top: 80px; }
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
 
@@ -90,32 +101,32 @@ html { scroll-behavior: smooth; }
   position: sticky; top: 0; z-index: 5;
   background: color-mix(in srgb, var(--paper) 86%, transparent);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  border-bottom: 1px solid transparent;
 }
 .top {
   display: flex; justify-content: space-between; align-items: center;
   padding: 18px 0; font-family: var(--display); font-size: 1rem;
 }
-.top .name { font-weight: 800; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.top .name { font-weight: 800; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
+.top .name img { width: 26px; height: 26px; }
 .top nav { display: flex; gap: 22px; }
 .top nav a { color: var(--muted); text-decoration: none; }
 .top nav a:hover { color: var(--ink); }
 
 /* hero */
 .hero {
-  display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center;
-  padding: 64px 0 80px;
+  display: grid; grid-template-columns: 1fr 1.08fr; gap: 56px; align-items: center;
+  padding: 56px 0 88px;
 }
 .hero h1 {
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(2.6rem, 6.2vw, 4.9rem);
+  font-size: clamp(2.6rem, 5.8vw, 4.6rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
   margin: 0 0 28px;
   text-wrap: balance;
 }
-.hero .lede { font-size: 1.3125rem; max-width: 34em; margin: 0 0 32px; color: var(--ink); }
+.hero .lede { font-size: 1.3125rem; max-width: 34em; margin: 0 0 32px; }
 .actions { display: flex; flex-wrap: wrap; gap: 14px; }
 .btn {
   font-family: var(--display); font-weight: 600; font-size: 1rem;
@@ -126,45 +137,76 @@ html { scroll-behavior: smooth; }
 .btn.secondary { color: var(--ink); }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
 
-/* pipeline figure: the one moving thing on the page */
-.flow { width: 100%; height: auto; display: block; }
-.flow .node { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+/* shared drawing language for every diagram on the page */
+svg.dia { width: 100%; height: auto; display: block; overflow: visible; }
+.dia text { font-family: var(--display); fill: var(--muted); }
+.dia .k { fill: var(--ink); font-weight: 600; }
+.dia .node { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.dia .wire { fill: none; stroke: var(--line); stroke-width: 2; stroke-linecap: round; }
+.dia .arrow { fill: none; stroke: var(--muted); stroke-width: 1.75; stroke-linecap: round; marker-end: url(#arrowhead); }
+.dia .head { fill: var(--muted); }
+.dia .a { fill: var(--saffron); }
+.dia .b { fill: var(--cobalt); }
+.dia .c { fill: var(--teal); }
+.dia .dot { fill: var(--line); }
+
+/* hero diagram */
+.flow .panel { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.flow .node { fill: var(--paper); }
 .flow .topic { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
-.flow .part { stroke: var(--line); stroke-width: 1.5; }
-.flow .wire { fill: none; stroke: var(--line); stroke-width: 2; }
-.flow text { font-family: var(--display); font-size: 15px; fill: var(--muted); }
-.flow .tname { fill: var(--ink); font-weight: 600; }
-.flow .pkt { fill: var(--saffron); }
-.flow .pkt.b { fill: var(--cobalt); }
-.flow-cap { font-size: 0.95rem; color: var(--muted); margin: 12px 0 0; font-style: italic; }
+.flow .lane { fill: var(--paper); }
+.flow text { font-size: 16px; }
+.flow .plab { font-size: 13px; }
+.flow .foot { font-size: 13px; }
+.flow-cap { font-size: 0.95rem; color: var(--muted); margin: 14px 0 0; font-style: italic; }
 
 /* sections */
-section { padding: 72px 0; border-top: 1px solid var(--line); }
-.sec { display: block; }
+section { padding: 80px 0; border-top: 1px solid var(--line); }
 .sec h2 {
   font-family: var(--display); font-weight: 800; font-size: 1.75rem;
   letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 32px;
 }
-.sec .body { max-width: none; }
 .narrow { max-width: 44rem; }
-.sec .body > p:first-child { margin-top: 0; }
 
 /* projects */
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .proj {
-  background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
-  padding: 28px; display: flex; flex-direction: column;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  padding: 14px 14px 28px; display: flex; flex-direction: column;
 }
-.proj .stack { margin-top: auto; padding-top: 8px; }
-.proj p { font-size: 1.0625rem; }
+.proj > :not(.schem) { margin-left: 14px; margin-right: 14px; }
+.schem { margin: 0 0 24px; background: var(--paper); border-radius: 12px; padding: 18px 16px 14px; }
+.schem text { font-size: 12.5px; }
+.schem .tier-b { fill: var(--bronze); }
+.schem .tier-s { fill: var(--silver); }
+.schem .tier-g { fill: var(--gold); }
+.schem .rows { stroke: #FFFFFF; stroke-opacity: 0.6; stroke-width: 2; stroke-linecap: round; }
+.schem .gate { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.schem .bad { fill: none; stroke: var(--stop); stroke-width: 1.75; stroke-dasharray: 3 3; }
+.schem .badpath { fill: none; stroke: var(--stop); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.schem .tx { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.schem .ev { font-size: 10px; fill: #FFFFFF; font-weight: 600; }
+.schem .code { stroke: var(--line); stroke-width: 4; stroke-linecap: round; }
+.schem .code.hit { stroke: var(--ink); }
+.schem .hl { fill: var(--saffron); fill-opacity: 0.4; }
+.schem .cite { fill: none; stroke: var(--cobalt); stroke-width: 1.5; }
+.schem .citet { fill: var(--cobalt); font-size: 11.5px; font-weight: 600; }
+.schem .axis { stroke: var(--line); stroke-width: 1.5; }
+.schem .base { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.schem .pass { fill: var(--cobalt); fill-opacity: 0.85; }
+.schem .fail { fill: var(--stop); }
+.schem .ci { stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; }
+.schem .stopt { fill: var(--stop); font-weight: 600; }
+
 .proj h3 {
   font-family: var(--display); font-weight: 600; font-size: 1.35rem;
-  letter-spacing: -0.015em; margin: 0 0 8px; line-height: 1.2;
+  letter-spacing: -0.015em; margin-top: 0; margin-bottom: 8px; line-height: 1.2;
 }
 .proj h3 a { color: var(--ink); text-decoration: none; }
 .proj h3 a:hover { color: var(--cobalt); text-decoration: underline; }
-.proj p { margin: 0 0 12px; }
-.stack { font-family: var(--display); font-size: 0.95rem; color: var(--muted); margin: 0; }
+.proj p { font-size: 1.0625rem; margin-top: 0; margin-bottom: 12px; }
+.proj .stack { margin-top: auto; margin-bottom: 0; padding-top: 8px; }
+.stack { font-family: var(--display); font-size: 0.95rem; color: var(--muted); }
 
 /* experience */
 .roles { list-style: none; padding: 0 0 0 28px; margin: 0; border-left: 2px solid var(--line); max-width: 44rem; }
@@ -174,6 +216,7 @@ section { padding: 72px 0; border-top: 1px solid var(--line); }
   width: 14px; height: 14px; border-radius: 50%;
   background: var(--paper); border: 3px solid var(--cobalt);
 }
+.roles li:first-child::before { background: var(--cobalt); }
 .roles li:last-child { padding-bottom: 0; }
 .roles .org { font-family: var(--display); font-weight: 600; font-size: 1.25rem; display: block; }
 .roles .role { color: var(--muted); font-style: italic; display: block; margin-bottom: 4px; }
@@ -187,27 +230,25 @@ section { padding: 72px 0; border-top: 1px solid var(--line); }
   border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
 }
 
-.talks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.talks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .talk { border-left: 3px solid var(--saffron); padding: 4px 0 4px 18px; font-size: 1.0625rem; }
 .talk strong { font-family: var(--display); font-weight: 600; font-size: 1.15rem; display: block; }
+.edu { margin: 32px 0 0; }
 
 /* contact */
+.contact { text-align: center; }
 .contact h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); }
+.contact .narrow { margin: 0 auto; }
 .contact .mail {
   font-family: var(--display); font-weight: 600;
   font-size: clamp(1.3rem, 3.2vw, 2rem); letter-spacing: -0.01em;
 }
-.links { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 20px; font-family: var(--display); }
+.links { display: flex; flex-wrap: wrap; justify-content: center; gap: 22px; margin-top: 20px; font-family: var(--display); }
 
 footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-top: 1px solid var(--line); }
 
-.contact .body { text-align: center; }
-.contact .narrow { margin: 0 auto; }
-.contact .links { justify-content: center; }
-.contact h2 { text-align: center; }
-
 @media (max-width: 860px) {
-  .hero { grid-template-columns: 1fr; padding: 40px 0 56px; gap: 40px; }
+  .hero { grid-template-columns: 1fr; padding: 32px 0 56px; gap: 40px; }
   .grid, .talks { grid-template-columns: 1fr; }
   section { padding: 56px 0; }
   .top nav { flex-wrap: wrap; gap: 6px 16px; }
@@ -217,7 +258,10 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
   .skills { grid-template-columns: 1fr; gap: 6px; }
   .skills dd { margin-bottom: 14px; }
   .top { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 0; }
-  .proj { padding: 22px; }
+  .proj { padding: 10px 10px 22px; }
+  .proj > :not(.schem) { margin-left: 10px; margin-right: 10px; }
+  .schem { padding: 14px 10px 10px; }
+  .schem text { font-size: 13.5px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .flow .pkt { display: none; }
@@ -226,10 +270,20 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" style="fill: var(--muted)"/>
+    </marker>
+    <pattern id="dotgrid" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.1" style="fill: var(--line)"/>
+    </pattern>
+  </defs>
+</svg>
 <a class="skip" href="#main">Skip to content</a>
 <div class="bar"><div class="wrap">
   <header class="top">
-    <a class="name" href="#">Pragathi Gopal</a>
+    <a class="name" href="#"><img src="favicon.svg" alt="">Pragathi Gopal</a>
     <nav aria-label="Sections">
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
@@ -244,7 +298,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
     <div class="hero">
       <div>
         <h1>I build the backend systems that keep data moving.</h1>
-        <p class="lede">I'm a senior software engineer with seven years in backend and platform engineering: event driven services on Kafka, APIs in Java, Go, and Python, and the Kubernetes and cloud infrastructure underneath them. Lately I've been building LLM infrastructure and evaluation tooling.</p>
+        <p class="lede">I'm a senior software engineer with seven years in backend and platform engineering: event-driven services on Kafka, APIs in Java, Go, and Python, and the Kubernetes and cloud infrastructure underneath them. Lately I've been building LLM infrastructure and evaluation tooling.</p>
         <div class="actions">
           <a class="btn primary" href="mailto:pragu.gopal@gmail.com">Email me</a>
           <a class="btn secondary" href="https://github.com/pragathigopal7">See my GitHub</a>
@@ -252,37 +306,76 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
       </div>
 
       <figure style="margin:0">
-        <svg class="flow" viewBox="0 0 480 340" role="img" aria-labelledby="flow-title">
-          <title id="flow-title">Diagram of events flowing from three producers through a partitioned topic to two consumers</title>
+        <svg class="dia flow anim" viewBox="0 0 560 400" role="img" aria-labelledby="flow-title">
+          <title id="flow-title">Events from orders, payments, and inventory services are appended to a three-partition topic and read by a lakehouse and downstream services</title>
+          <defs>
+            <clipPath id="lane0"><rect x="232" y="128" width="136" height="28"/></clipPath>
+            <clipPath id="lane1"><rect x="232" y="188" width="136" height="28"/></clipPath>
+            <clipPath id="lane2"><rect x="232" y="248" width="136" height="28"/></clipPath>
+          </defs>
+          <rect class="panel" x="1" y="1" width="558" height="398" rx="20"/>
+          <rect x="1" y="1" width="558" height="398" rx="20" fill="url(#dotgrid)"/>
+
           <!-- wires -->
-          <path id="w1" class="wire" d="M110 60 C 160 60, 160 130, 200 150"/>
-          <path id="w2" class="wire" d="M110 170 L 200 170"/>
-          <path id="w3" class="wire" d="M110 280 C 160 280, 160 210, 200 190"/>
-          <path id="w4" class="wire" d="M300 155 C 340 140, 330 95, 370 95"/>
-          <path id="w5" class="wire" d="M300 185 C 340 200, 330 245, 370 245"/>
+          <path id="w1" class="wire" d="M142 82 C 172 82, 162 142, 190 142"/>
+          <path id="w2" class="wire" d="M142 202 L 190 202"/>
+          <path id="w3" class="wire" d="M142 322 C 172 322, 162 262, 190 262"/>
+          <path id="w4" class="wire" d="M386 172 C 414 172, 410 142, 440 142"/>
+          <path id="w5" class="wire" d="M386 232 C 414 232, 410 262, 440 262"/>
+
           <!-- producers -->
-          <rect class="node" x="14" y="38" width="96" height="44" rx="10"/>
-          <text x="62" y="65" text-anchor="middle">orders</text>
-          <rect class="node" x="14" y="148" width="96" height="44" rx="10"/>
-          <text x="62" y="175" text-anchor="middle">payments</text>
-          <rect class="node" x="14" y="258" width="96" height="44" rx="10"/>
-          <text x="62" y="285" text-anchor="middle">inventory</text>
-          <!-- topic with partitions -->
-          <rect class="topic" x="200" y="120" width="100" height="100" rx="12"/>
-          <line class="part" x1="200" y1="153" x2="300" y2="153"/>
-          <line class="part" x1="200" y1="187" x2="300" y2="187"/>
-          <text class="tname" x="250" y="245" text-anchor="middle">topic</text>
+          <rect class="node" x="24" y="60" width="118" height="44" rx="10"/>
+          <circle class="a" cx="43" cy="82" r="5"/><text class="k" x="56" y="88">orders</text>
+          <rect class="node" x="24" y="180" width="118" height="44" rx="10"/>
+          <circle class="b" cx="43" cy="202" r="5"/><text class="k" x="56" y="208">payments</text>
+          <rect class="node" x="24" y="300" width="118" height="44" rx="10"/>
+          <circle class="c" cx="43" cy="322" r="5"/><text class="k" x="56" y="328">inventory</text>
+
+          <!-- partitioned topic: each lane is an append-only log that keeps moving -->
+          <rect class="topic" x="190" y="104" width="196" height="196" rx="14"/>
+          <rect class="lane" x="200" y="120" width="176" height="44" rx="8"/>
+          <rect class="lane" x="200" y="180" width="176" height="44" rx="8"/>
+          <rect class="lane" x="200" y="240" width="176" height="44" rx="8"/>
+          <text class="plab" x="210" y="147">p0</text>
+          <text class="plab" x="210" y="207">p1</text>
+          <text class="plab" x="210" y="267">p2</text>
+          <g clip-path="url(#lane0)"><g>
+            <rect class="a" x="124" y="128" width="13" height="28" rx="3"/><rect class="a" x="142" y="128" width="13" height="28" rx="3"/><rect class="b" x="160" y="128" width="13" height="28" rx="3"/><rect class="c" x="178" y="128" width="13" height="28" rx="3"/><rect class="a" x="196" y="128" width="13" height="28" rx="3"/><rect class="b" x="214" y="128" width="13" height="28" rx="3"/>
+            <rect class="a" x="232" y="128" width="13" height="28" rx="3"/><rect class="a" x="250" y="128" width="13" height="28" rx="3"/><rect class="b" x="268" y="128" width="13" height="28" rx="3"/><rect class="c" x="286" y="128" width="13" height="28" rx="3"/><rect class="a" x="304" y="128" width="13" height="28" rx="3"/><rect class="b" x="322" y="128" width="13" height="28" rx="3"/>
+            <rect class="a" x="340" y="128" width="13" height="28" rx="3"/><rect class="a" x="358" y="128" width="13" height="28" rx="3"/>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="108 0" dur="7.2s" repeatCount="indefinite"/>
+          </g></g>
+          <g clip-path="url(#lane1)"><g>
+            <rect class="b" x="124" y="188" width="13" height="28" rx="3"/><rect class="c" x="142" y="188" width="13" height="28" rx="3"/><rect class="b" x="160" y="188" width="13" height="28" rx="3"/><rect class="a" x="178" y="188" width="13" height="28" rx="3"/><rect class="c" x="196" y="188" width="13" height="28" rx="3"/><rect class="b" x="214" y="188" width="13" height="28" rx="3"/>
+            <rect class="b" x="232" y="188" width="13" height="28" rx="3"/><rect class="c" x="250" y="188" width="13" height="28" rx="3"/><rect class="b" x="268" y="188" width="13" height="28" rx="3"/><rect class="a" x="286" y="188" width="13" height="28" rx="3"/><rect class="c" x="304" y="188" width="13" height="28" rx="3"/><rect class="b" x="322" y="188" width="13" height="28" rx="3"/>
+            <rect class="b" x="340" y="188" width="13" height="28" rx="3"/><rect class="c" x="358" y="188" width="13" height="28" rx="3"/>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="108 0" dur="8.4s" repeatCount="indefinite"/>
+          </g></g>
+          <g clip-path="url(#lane2)"><g>
+            <rect class="c" x="124" y="248" width="13" height="28" rx="3"/><rect class="a" x="142" y="248" width="13" height="28" rx="3"/><rect class="c" x="160" y="248" width="13" height="28" rx="3"/><rect class="c" x="178" y="248" width="13" height="28" rx="3"/><rect class="b" x="196" y="248" width="13" height="28" rx="3"/><rect class="a" x="214" y="248" width="13" height="28" rx="3"/>
+            <rect class="c" x="232" y="248" width="13" height="28" rx="3"/><rect class="a" x="250" y="248" width="13" height="28" rx="3"/><rect class="c" x="268" y="248" width="13" height="28" rx="3"/><rect class="c" x="286" y="248" width="13" height="28" rx="3"/><rect class="b" x="304" y="248" width="13" height="28" rx="3"/><rect class="a" x="322" y="248" width="13" height="28" rx="3"/>
+            <rect class="c" x="340" y="248" width="13" height="28" rx="3"/><rect class="a" x="358" y="248" width="13" height="28" rx="3"/>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="108 0" dur="6.6s" repeatCount="indefinite"/>
+          </g></g>
+
           <!-- consumers -->
-          <rect class="node" x="370" y="73" width="100" height="44" rx="10"/>
-          <text x="420" y="100" text-anchor="middle">lakehouse</text>
-          <rect class="node" x="370" y="223" width="100" height="44" rx="10"/>
-          <text x="420" y="250" text-anchor="middle">services</text>
-          <!-- packets -->
-          <circle class="pkt" r="6"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#w1"/></animateMotion></circle>
-          <circle class="pkt" r="6"><animateMotion dur="2.6s" begin="-0.9s" repeatCount="indefinite"><mpath href="#w2"/></animateMotion></circle>
-          <circle class="pkt" r="6"><animateMotion dur="2.6s" begin="-1.7s" repeatCount="indefinite"><mpath href="#w3"/></animateMotion></circle>
-          <circle class="pkt b" r="6"><animateMotion dur="2.2s" begin="-0.4s" repeatCount="indefinite"><mpath href="#w4"/></animateMotion></circle>
-          <circle class="pkt b" r="6"><animateMotion dur="2.2s" begin="-1.4s" repeatCount="indefinite"><mpath href="#w5"/></animateMotion></circle>
+          <rect class="node" x="440" y="120" width="104" height="44" rx="10"/>
+          <text class="k" x="492" y="148" text-anchor="middle">lakehouse</text>
+          <rect class="node" x="440" y="240" width="104" height="44" rx="10"/>
+          <text class="k" x="492" y="268" text-anchor="middle">services</text>
+
+          <text class="foot" x="83" y="378" text-anchor="middle">producers</text>
+          <text class="foot" x="288" y="378" text-anchor="middle">partitioned topic</text>
+          <text class="foot" x="492" y="378" text-anchor="middle">consumers</text>
+
+          <!-- events in flight -->
+          <circle class="pkt a" r="6"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#w1"/></animateMotion></circle>
+          <circle class="pkt b" r="6"><animateMotion dur="2.6s" begin="-0.9s" repeatCount="indefinite"><mpath href="#w2"/></animateMotion></circle>
+          <circle class="pkt c" r="6"><animateMotion dur="2.6s" begin="-1.7s" repeatCount="indefinite"><mpath href="#w3"/></animateMotion></circle>
+          <circle class="pkt a" r="6"><animateMotion dur="2.2s" begin="-0.4s" repeatCount="indefinite"><mpath href="#w4"/></animateMotion></circle>
+          <circle class="pkt b" r="6"><animateMotion dur="2.2s" begin="-1.5s" repeatCount="indefinite"><mpath href="#w4"/></animateMotion></circle>
+          <circle class="pkt c" r="6"><animateMotion dur="2.2s" begin="-0.9s" repeatCount="indefinite"><mpath href="#w5"/></animateMotion></circle>
+          <circle class="pkt a" r="6"><animateMotion dur="2.2s" begin="-2s" repeatCount="indefinite"><mpath href="#w5"/></animateMotion></circle>
         </svg>
         <figcaption class="flow-cap">Most of my work lives in the middle of a diagram like this one.</figcaption>
       </figure>
@@ -291,27 +384,118 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
     <section id="work">
       <div class="sec">
         <h2>Selected work</h2>
-        <div class="body grid">
+        <div class="grid">
+
           <article class="proj">
+            <figure class="schem">
+              <svg class="dia" viewBox="0 0 400 130" role="img" aria-label="Events pass a schema check, malformed ones are rejected, and the rest are refined from bronze to silver to gold tables">
+                <line class="wire" x1="6" y1="58" x2="96" y2="58"/>
+                <circle class="a" cx="16" cy="58" r="6"/><circle class="b" cx="36" cy="58" r="6"/><circle class="c" cx="56" cy="58" r="6"/><circle class="a" cx="76" cy="58" r="6"/>
+                <line class="gate" x1="102" y1="34" x2="102" y2="84"/>
+                <text x="102" y="22" text-anchor="middle">schema check</text>
+                <path class="badpath" d="M102 84 Q 102 112 90 112"/>
+                <circle class="bad" cx="82" cy="112" r="6"/>
+                <text x="70" y="117" text-anchor="end">rejected</text>
+                <path class="arrow" d="M108 58 H 136"/>
+                <rect class="tier-b" x="142" y="34" width="64" height="48" rx="8"/>
+                <path class="rows" d="M152 44 H196 M152 52 H196 M152 60 H196 M152 68 H196 M152 74 H196"/>
+                <path class="arrow" d="M210 58 H 226"/>
+                <rect class="tier-s" x="232" y="34" width="64" height="48" rx="8"/>
+                <path class="rows" d="M242 48 H286 M242 58 H286 M242 68 H286"/>
+                <path class="arrow" d="M300 58 H 316"/>
+                <rect class="tier-g" x="322" y="34" width="64" height="48" rx="8"/>
+                <path class="rows" d="M332 52 H376 M332 64 H362"/>
+                <text x="264" y="100" text-anchor="middle">silver</text>
+                <text x="354" y="100" text-anchor="middle">gold</text>
+                <text x="174" y="100" text-anchor="middle">bronze</text>
+              </svg>
+            </figure>
             <h3><a href="https://github.com/pragathigopal7/retail-data-pipeline">Retail data pipeline</a></h3>
             <p>A streaming orders pipeline that takes events from Kafka, enforces a schema contract at the edge, and builds bronze, silver, and gold tables in DuckDB over Parquet. It handles duplicate deliveries, late events, and malformed payloads, and quality gates stop a bad feed before it reaches analytics.</p>
             <p class="stack">Python, Kafka (Redpanda), DuckDB, Parquet, Pydantic, GitHub Actions</p>
           </article>
+
           <article class="proj">
+            <figure class="schem">
+              <svg class="dia" viewBox="0 0 400 130" role="img" aria-label="The same order request sent twice with one idempotency key creates one order; the order and its outbox entry are written in one transaction, and events go out in order">
+                <rect class="node" x="6" y="26" width="112" height="28" rx="14"/>
+                <text class="k" x="62" y="45" text-anchor="middle">POST /orders</text>
+                <rect class="node" x="6" y="76" width="112" height="28" rx="14"/>
+                <text class="k" x="62" y="95" text-anchor="middle">POST /orders</text>
+                <text x="62" y="124" text-anchor="middle">retry, same key</text>
+                <path class="wire" d="M118 40 C 140 40, 140 63, 162 63"/>
+                <path class="arrow" d="M118 90 C 140 90, 140 63, 162 63"/>
+                <rect class="tx" x="150" y="16" width="156" height="98" rx="12"/>
+                <rect class="node" x="166" y="44" width="58" height="36" rx="8"/>
+                <text class="k" x="195" y="67" text-anchor="middle">order</text>
+                <line class="wire" x1="224" y1="62" x2="236" y2="62"/>
+                <rect class="node" x="236" y="44" width="58" height="36" rx="8"/>
+                <text class="k" x="265" y="67" text-anchor="middle">outbox</text>
+                <text x="228" y="104" text-anchor="middle">one transaction</text>
+                <path class="arrow" d="M294 62 H 322"/>
+                <rect class="b" x="328" y="51" width="18" height="22" rx="4"/><text class="ev" x="337" y="66" text-anchor="middle">1</text>
+                <rect class="b" x="350" y="51" width="18" height="22" rx="4"/><text class="ev" x="359" y="66" text-anchor="middle">2</text>
+                <rect class="b" x="372" y="51" width="18" height="22" rx="4"/><text class="ev" x="381" y="66" text-anchor="middle">3</text>
+                <text x="359" y="94" text-anchor="middle">events</text>
+              </svg>
+            </figure>
             <h3><a href="https://github.com/pragathigopal7/orders-api">Orders API in Go</a></h3>
             <p>A REST service for a product catalog, inventory, and the order lifecycle. Idempotency keys make retried orders safe even when they arrive at the same time, stock is reserved inside one transaction so nothing oversells, and a transactional outbox delivers events at least once and in order per order. Keyset pagination keeps lists stable while data changes.</p>
             <p class="stack">Go standard library, PostgreSQL, JWT, OpenAPI 3.1, Docker, Kubernetes (Kustomize), GitHub Actions</p>
           </article>
+
           <article class="proj">
+            <figure class="schem">
+              <svg class="dia" viewBox="0 0 400 130" role="img" aria-label="A question about the codebase is answered from the matching source line, with a file and line citation">
+                <rect class="node" x="6" y="36" width="128" height="52" rx="12"/>
+                <text class="k" x="70" y="58" text-anchor="middle">Where is stock</text>
+                <text class="k" x="70" y="75" text-anchor="middle">reserved?</text>
+                <path class="arrow" d="M134 62 H 160"/>
+                <path class="node" d="M166 8 H228 L246 26 V122 H166 Z"/>
+                <path class="wire" d="M228 8 V26 H246" style="stroke-width:1.5"/>
+                <rect class="hl" x="171" y="76" width="70" height="14" rx="3"/>
+                <path class="code" d="M176 36 H214 M176 47 H226 M184 58 H210 M184 69 H232"/>
+                <path class="code hit" d="M184 83 H228"/>
+                <path class="code" d="M184 97 H218 M176 108 H204"/>
+                <path class="arrow" d="M246 83 C 258 83, 258 74, 268 74"/>
+                <rect class="node" x="274" y="30" width="120" height="70" rx="12"/>
+                <text class="k" x="288" y="54">In reserve()</text>
+                <rect class="cite" x="284" y="66" width="100" height="22" rx="11"/>
+                <text class="citet" x="334" y="81" text-anchor="middle">Stock.java:118</text>
+              </svg>
+            </figure>
             <h3><a href="https://github.com/pragathigopal7/Bedrock">Codebase Q&amp;A agent on Amazon Bedrock AgentCore</a></h3>
             <p>An agent that answers questions about a Java Spring Boot codebase and cites file and line references for every claim, built for engineers working through legacy migrations. The focus is measuring accuracy: retrieval is evaluated live, and a local demo runs offline or against a local model.</p>
             <p class="stack">Python, Amazon Bedrock AgentCore, Strands Agents SDK, Ollama</p>
           </article>
+
           <article class="proj">
+            <figure class="schem">
+              <svg class="dia" viewBox="0 0 400 130" role="img" aria-label="Pass rates with confidence intervals across six prompt versions; version six falls below the baseline and CI blocks it">
+                <line class="axis" x1="20" y1="112" x2="394" y2="112"/>
+                <line class="base" x1="20" y1="32" x2="394" y2="32"/>
+                <text x="22" y="24">baseline</text>
+                <rect class="pass" x="36" y="50" width="30" height="62" rx="3"/>
+                <rect class="pass" x="92" y="41" width="30" height="71" rx="3"/>
+                <rect class="pass" x="148" y="34" width="30" height="78" rx="3"/>
+                <rect class="pass" x="204" y="31" width="30" height="81" rx="3"/>
+                <rect class="pass" x="260" y="28" width="30" height="84" rx="3"/>
+                <rect class="fail" x="316" y="43" width="30" height="69" rx="3"/>
+                <path class="ci" d="M51 43 V57 M46 43 H56 M46 57 H56 M107 34 V48 M102 34 H112 M102 48 H112 M163 27 V41 M158 27 H168 M158 41 H168 M219 24 V38 M214 24 H224 M214 38 H224 M275 21 V35 M270 21 H280 M270 35 H280 M331 36 V50 M326 36 H336 M326 50 H336"/>
+                <text class="stopt" x="331" y="24" text-anchor="middle">blocked</text>
+                <text x="51" y="127" text-anchor="middle">v1</text>
+                <text x="107" y="127" text-anchor="middle">v2</text>
+                <text x="163" y="127" text-anchor="middle">v3</text>
+                <text x="219" y="127" text-anchor="middle">v4</text>
+                <text x="275" y="127" text-anchor="middle">v5</text>
+                <text x="331" y="127" text-anchor="middle">v6</text>
+              </svg>
+            </figure>
             <h3><a href="https://github.com/pragathigopal7/llm-eval-harness">LLM eval harness</a></h3>
-            <p>A dependency free Python harness that runs a model over a test set, scores each answer with reference metrics or an LLM judge, tracks latency, tokens, and cost, and fails CI when a prompt or model change makes results worse.</p>
+            <p>A dependency-free Python harness that runs a model over a test set, scores each answer with reference metrics or an LLM judge, tracks latency, tokens, and cost, and fails CI when a prompt or model change makes results worse.</p>
             <p class="stack">Python standard library, Anthropic and OpenAI compatible APIs</p>
           </article>
+
         </div>
       </div>
     </section>
@@ -319,51 +503,46 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
     <section id="experience">
       <div class="sec">
         <h2>Experience</h2>
-        <div class="body">
-          <ul class="roles">
-            <li>
-              <span class="org">LinkedIn</span>
-              <span class="role">AI Trainer</span>
-              <p>Evaluating and annotating model outputs to improve model quality.</p>
-            </li>
-            <li>
-              <span class="org">Walmart Global Tech</span>
-              <span class="role">Senior Software Engineer; System and Infrastructure Engineer III</span>
-              <p>Built backend services for the Walmart+ membership benefits platform, including the streaming integrations with Peacock and Paramount+. Built endpoint security automation as Palo Alto Networks Cortex XSOAR playbooks.</p>
-            </li>
-            <li>
-              <span class="org">Kaiser Permanente</span>
-              <span class="role">Software engineering</span>
-            </li>
-            <li>
-              <span class="org">Intel</span>
-              <span class="role">Software engineering</span>
-            </li>
-          </ul>
-        </div>
+        <ul class="roles">
+          <li>
+            <span class="org">LinkedIn</span>
+            <span class="role">AI Trainer</span>
+            <p>Evaluating and annotating model outputs to improve model quality.</p>
+          </li>
+          <li>
+            <span class="org">Walmart Global Tech</span>
+            <span class="role">Senior Software Engineer; System and Infrastructure Engineer III</span>
+            <p>Built backend services for the Walmart+ membership benefits platform, including the streaming integrations with Peacock and Paramount+. Built endpoint security automation as Palo Alto Networks Cortex XSOAR playbooks.</p>
+          </li>
+          <li>
+            <span class="org">Kaiser Permanente</span>
+            <span class="role">Software engineering</span>
+          </li>
+          <li>
+            <span class="org">Intel</span>
+            <span class="role">Software engineering</span>
+          </li>
+        </ul>
       </div>
     </section>
 
     <section id="skills">
       <div class="sec">
         <h2>Tools I reach for</h2>
-        <div class="body">
-          <dl class="skills">
-            <dt>Languages</dt><dd><span class="chip">Java</span><span class="chip">Go</span><span class="chip">Python</span><span class="chip">SQL</span></dd>
-            <dt>Backend</dt><dd><span class="chip">Spring Boot</span><span class="chip">REST and event driven APIs</span><span class="chip">Kafka</span></dd>
-            <dt>Platform</dt><dd><span class="chip">Kubernetes</span><span class="chip">Docker</span><span class="chip">AWS</span><span class="chip">Azure</span><span class="chip">CI/CD</span></dd>
-            <dt>Data</dt><dd><span class="chip">Streaming pipelines</span><span class="chip">Parquet</span><span class="chip">DuckDB</span><span class="chip">data quality checks</span></dd>
-            <dt>AI</dt><dd><span class="chip">LLM evaluation</span><span class="chip">semantic caching</span><span class="chip">agents</span><span class="chip">MCP</span></dd>
-          </dl>
-        </div>
+        <dl class="skills">
+          <dt>Languages</dt><dd><span class="chip">Java</span><span class="chip">Go</span><span class="chip">Python</span><span class="chip">SQL</span></dd>
+          <dt>Backend</dt><dd><span class="chip">Spring Boot</span><span class="chip">REST and event-driven APIs</span><span class="chip">Kafka</span></dd>
+          <dt>Platform</dt><dd><span class="chip">Kubernetes</span><span class="chip">Docker</span><span class="chip">AWS</span><span class="chip">Azure</span><span class="chip">CI/CD</span></dd>
+          <dt>Data</dt><dd><span class="chip">Streaming pipelines</span><span class="chip">Parquet</span><span class="chip">DuckDB</span><span class="chip">Data quality checks</span></dd>
+          <dt>AI</dt><dd><span class="chip">LLM evaluation</span><span class="chip">Semantic caching</span><span class="chip">Agents</span><span class="chip">MCP</span></dd>
+        </dl>
       </div>
     </section>
 
     <section id="speaking">
       <div class="sec">
         <h2>Speaking and research</h2>
-        <div class="body">
-          <div class="talks">
+        <div class="talks">
           <div class="talk">
             <strong>Boosting LLM Performance &amp; Semantic Caching</strong>
             Guest speaker, AI @ Walmart Global Tech
@@ -380,22 +559,19 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             <strong>National Science Foundation research, ASU eLab</strong>
             Applied machine learning to multimodal sensor data.
           </div>
-          </div>
-          <p style="margin-top:32px">MS in Electrical Engineering and Computer Sciences, UC Berkeley. BS, Arizona State University. Member of Toastmasters.</p>
         </div>
+        <p class="edu">MS in Electrical Engineering and Computer Sciences, UC Berkeley. BS, Arizona State University. Member of Toastmasters.</p>
       </div>
     </section>
 
     <section id="contact" class="contact">
       <div class="sec">
         <h2>Say hello</h2>
-        <div class="body">
-          <div class="narrow"><p>I'm based in the Bay Area and open to senior backend, platform, and data engineering roles. The fastest way to reach me is email.</p></div>
-          <a class="mail" href="mailto:pragu.gopal@gmail.com">pragu.gopal@gmail.com</a>
-          <div class="links">
-            <a href="https://www.linkedin.com/in/prag-gopal">LinkedIn</a>
-            <a href="https://github.com/pragathigopal7">GitHub</a>
-          </div>
+        <div class="narrow"><p>I'm based in the Bay Area and open to senior backend, platform, and data engineering roles. The fastest way to reach me is email.</p></div>
+        <a class="mail" href="mailto:pragu.gopal@gmail.com">pragu.gopal@gmail.com</a>
+        <div class="links">
+          <a href="https://www.linkedin.com/in/prag-gopal">LinkedIn</a>
+          <a href="https://github.com/pragathigopal7">GitHub</a>
         </div>
       </div>
     </section>
@@ -403,5 +579,10 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
 
   <footer>© 2026 Pragathi Gopal. Built by hand and hosted on GitHub Pages.</footer>
 </div>
+<script>
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('svg.anim').forEach(function (s) { if (s.pauseAnimations) s.pauseAnimations(); });
+  }
+</script>
 </body>
 </html>
