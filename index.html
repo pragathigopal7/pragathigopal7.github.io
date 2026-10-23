@@ -208,6 +208,26 @@ section { padding: 80px 0; border-top: 1px solid var(--line); }
 .proj .stack { margin-top: auto; margin-bottom: 0; padding-top: 8px; }
 .stack { font-family: var(--display); font-size: 0.95rem; color: var(--muted); }
 
+/* architecture diagrams in project cards */
+.arch { margin: 6px 0 0; margin-top: auto; padding-top: 18px; border-top: 1px dashed var(--line); }
+.arch figcaption {
+  font-family: var(--display); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 12px;
+}
+.arch text { font-size: 12px; }
+.arch .sub { font-size: 10px; }
+.arch .k { font-size: 12.5px; }
+.arch .grp { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.arch .node.tb { stroke: var(--bronze); stroke-width: 2; }
+.arch .node.ts { stroke: var(--silver); stroke-width: 2; }
+.arch .node.tg { stroke: var(--gold); stroke-width: 2; }
+.arch .node.db { stroke: var(--cobalt); stroke-width: 2; }
+.arch .node.bad { stroke: var(--stop); stroke-width: 1.75; stroke-dasharray: 4 3; }
+.arch .badarrow { stroke: var(--stop); stroke-dasharray: 3 4; }
+.arch .stopt { fill: var(--stop); }
+.arch .both { marker-start: url(#arrowhead); }
+.proj .arch + .stack { margin-top: 0; }
+
 /* experience */
 .roles { list-style: none; padding: 0 0 0 28px; margin: 0; border-left: 2px solid var(--line); max-width: 44rem; }
 .roles li { padding: 0 0 30px; position: relative; }
@@ -262,6 +282,7 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
   .proj > :not(.schem) { margin-left: 10px; margin-right: 10px; }
   .schem { padding: 14px 10px 10px; }
   .schem text { font-size: 13.5px; }
+  .proj > .arch { margin-left: 2px; margin-right: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .flow .pkt { display: none; }
@@ -412,6 +433,32 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             </figure>
             <h3><a href="https://github.com/pragathigopal7/retail-data-pipeline">Retail data pipeline</a></h3>
             <p>A streaming orders pipeline that takes events from Kafka, enforces a schema contract at the edge, and builds bronze, silver, and gold tables in DuckDB over Parquet. It handles duplicate deliveries, late events, and malformed payloads, and quality gates stop a bad feed before it reaches analytics.</p>
+            <figure class="arch">
+              <figcaption>Architecture</figcaption>
+              <svg class="dia" viewBox="0 0 400 246" role="img" aria-label="Order generator publishes to a Kafka topic or JSONL replay; ingest validates against a Pydantic contract, writes valid events to bronze Parquet and invalid ones to a dead letter queue; SQL models build silver and gold; quality gates check gold and the DLQ ratio before results land in the DuckDB warehouse">
+                
+                <rect class="node" x="6" y="10" width="112" height="46" rx="10"/><text class="k" x="62" y="30" text-anchor="middle">Generator</text><text class="sub" x="62" y="45" text-anchor="middle">injects faults</text>
+                <rect class="node" x="140" y="10" width="112" height="46" rx="10"/><text class="k" x="196" y="30" text-anchor="middle">Kafka topic</text><text class="sub" x="196" y="45" text-anchor="middle">or JSONL replay</text>
+                <rect class="node" x="270" y="10" width="112" height="46" rx="10"/><text class="k" x="326" y="30" text-anchor="middle">Ingest</text><text class="sub" x="326" y="45" text-anchor="middle">schema contract</text>
+                <rect class="node tb" x="270" y="100" width="112" height="46" rx="10"/><text class="k" x="326" y="120" text-anchor="middle">Bronze</text><text class="sub" x="326" y="135" text-anchor="middle">Parquet, partitioned</text>
+                <rect class="node ts" x="140" y="100" width="112" height="46" rx="10"/><text class="k" x="196" y="120" text-anchor="middle">Silver</text><text class="sub" x="196" y="135" text-anchor="middle">dedup, event time</text>
+                <rect class="node tg" x="6" y="100" width="112" height="46" rx="10"/><text class="k" x="62" y="120" text-anchor="middle">Gold</text><text class="sub" x="62" y="135" text-anchor="middle">sales, RFM, SLA</text>
+                <rect class="node bad" x="270" y="190" width="112" height="46" rx="10"/><text class="k" x="326" y="210" text-anchor="middle">Dead letters</text><text class="sub" x="326" y="225" text-anchor="middle">invalid + reason</text>
+                <rect class="node" x="140" y="190" width="112" height="46" rx="10"/><text class="k" x="196" y="210" text-anchor="middle">Quality gates</text><text class="sub" x="196" y="225" text-anchor="middle">block or warn</text>
+                <rect class="node" x="6" y="190" width="112" height="46" rx="10"/><text class="k" x="62" y="210" text-anchor="middle">Warehouse</text><text class="sub" x="62" y="225" text-anchor="middle">DuckDB + Parquet</text>
+                <path class="arrow" d="M118 33 H 134"/>
+                <path class="arrow" d="M252 33 H 264"/>
+                <path class="arrow" d="M326 56 V 94"/>
+                <text class="sub" x="334.0" y="82" text-anchor="start">valid</text>
+                <path class="arrow badarrow" d="M382 33 H 393 V 213 H 388"/>
+                <text class="sub stopt" x="388" y="172" text-anchor="end">invalid</text>
+                <path class="arrow" d="M270 123 H 258"/>
+                <path class="arrow" d="M140 123 H 124"/>
+                <path class="arrow" d="M62 146 C 62 172, 166 166, 166 184"/>
+                <path class="arrow" d="M270 213 H 258"/>
+                <path class="arrow" d="M140 213 H 124"/>
+              </svg>
+            </figure>
             <p class="stack">Python, Kafka (Redpanda), DuckDB, Parquet, Pydantic, GitHub Actions</p>
           </article>
 
@@ -441,6 +488,28 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             </figure>
             <h3><a href="https://github.com/pragathigopal7/orders-api">Orders API in Go</a></h3>
             <p>A REST service for a product catalog, inventory, and the order lifecycle. Idempotency keys make retried orders safe even when they arrive at the same time, stock is reserved inside one transaction so nothing oversells, and a transactional outbox delivers events at least once and in order per order. Keyset pagination keeps lists stable while data changes.</p>
+            <figure class="arch">
+              <figcaption>Architecture</figcaption>
+              <svg class="dia" viewBox="0 0 400 246" role="img" aria-label="A client calls the Go HTTP API with a JWT and idempotency key; the store writes the order, stock reservation, and outbox event to PostgreSQL in one transaction; an outbox relay in each pod claims events and a publisher sends them as logs or signed webhooks to consumers; the service runs on Kubernetes with 2 to 10 replicas">
+                <rect class="grp" x="128" y="2" width="266" height="178" rx="14"/><text class="sub" x="360" y="174" text-anchor="end">Kubernetes, 2 to 10 pods</text>
+                <rect class="node" x="6" y="10" width="112" height="46" rx="10"/><text class="k" x="62" y="30" text-anchor="middle">Client</text><text class="sub" x="62" y="45" text-anchor="middle">Idempotency-Key</text>
+                <rect class="node" x="140" y="10" width="112" height="46" rx="10"/><text class="k" x="196" y="30" text-anchor="middle">HTTP API</text><text class="sub" x="196" y="45" text-anchor="middle">scopes, RFC 9457</text>
+                <rect class="node" x="270" y="10" width="112" height="46" rx="10"/><text class="k" x="326" y="30" text-anchor="middle">Store</text><text class="sub" x="326" y="45" text-anchor="middle">conditional updates</text>
+                <rect class="node" x="140" y="100" width="112" height="46" rx="10"/><text class="k" x="196" y="120" text-anchor="middle">Outbox relay</text><text class="sub" x="196" y="135" text-anchor="middle">SKIP LOCKED</text>
+                <rect class="node" x="6" y="100" width="112" height="46" rx="10"/><text class="k" x="62" y="120" text-anchor="middle">Publisher</text><text class="sub" x="62" y="135" text-anchor="middle">log or webhook</text>
+                <rect class="node" x="6" y="190" width="112" height="46" rx="10"/><text class="k" x="62" y="210" text-anchor="middle">Consumers</text><text class="sub" x="62" y="225" text-anchor="middle">dedupe on event id</text>
+                <rect class="node db" x="270" y="190" width="112" height="46" rx="10"/><text class="k" x="326" y="210" text-anchor="middle">PostgreSQL</text><text class="sub" x="326" y="225" text-anchor="middle">orders, stock, outbox</text>
+                <path class="arrow" d="M118 33 H 134"/>
+                <path class="arrow" d="M252 33 H 264"/>
+                <path class="arrow" d="M370 56 V 184"/>
+                <text class="sub" x="362" y="128" text-anchor="end">one transaction</text>
+                <path class="arrow" d="M270 213 C 226 213, 196 180, 196 152"/>
+                <text class="sub" x="256" y="231.0" text-anchor="end">claim batch</text>
+                <path class="arrow" d="M140 123 H 124"/>
+                <path class="arrow" d="M62 146 V 184"/>
+                <text class="sub" x="70.0" y="172" text-anchor="start">at least once</text>
+              </svg>
+            </figure>
             <p class="stack">Go standard library, PostgreSQL, JWT, OpenAPI 3.1, Docker, Kubernetes (Kustomize), GitHub Actions</p>
           </article>
 
@@ -466,6 +535,30 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             </figure>
             <h3><a href="https://github.com/pragathigopal7/Bedrock">Codebase Q&amp;A agent on Amazon Bedrock AgentCore</a></h3>
             <p>An agent that answers questions about a Java Spring Boot codebase and cites file and line references for every claim, built for engineers working through legacy migrations. The focus is measuring accuracy: retrieval is evaluated live, and a local demo runs offline or against a local model.</p>
+            <figure class="arch">
+              <figcaption>Architecture</figcaption>
+              <svg class="dia" viewBox="0 0 400 246" role="img" aria-label="A client invokes AgentCore Runtime, which runs a Strands agent; the agent calls a foundation model on Bedrock or Ollama and the search_code and read_file tools, which use a BM25 retriever over method-level chunks of the Java repo; an evaluation harness runs a golden question set through retrieval and reports recall and MRR">
+                
+                <rect class="node" x="6" y="10" width="112" height="46" rx="10"/><text class="k" x="62" y="30" text-anchor="middle">Client</text><text class="sub" x="62" y="45" text-anchor="middle">AWS SDK or CLI</text>
+                <rect class="node" x="140" y="10" width="112" height="46" rx="10"/><text class="k" x="196" y="30" text-anchor="middle">AgentCore</text><text class="sub" x="196" y="45" text-anchor="middle">Runtime entrypoint</text>
+                <rect class="node" x="270" y="10" width="112" height="46" rx="10"/><text class="k" x="326" y="30" text-anchor="middle">Strands agent</text><text class="sub" x="326" y="45" text-anchor="middle">8 tool call budget</text>
+                <rect class="node" x="270" y="100" width="112" height="46" rx="10"/><text class="k" x="326" y="120" text-anchor="middle">Model</text><text class="sub" x="326" y="135" text-anchor="middle">Bedrock or Ollama</text>
+                <rect class="node" x="140" y="100" width="112" height="46" rx="10"/><text class="k" x="196" y="120" text-anchor="middle">Tools</text><text class="sub" x="196" y="135" text-anchor="middle">search, read_file</text>
+                <rect class="node" x="6" y="100" width="112" height="46" rx="10"/><text class="k" x="62" y="120" text-anchor="middle">Retriever</text><text class="sub" x="62" y="135" text-anchor="middle">BM25 over methods</text>
+                <rect class="node" x="6" y="190" width="112" height="46" rx="10"/><text class="k" x="62" y="210" text-anchor="middle">Java repo</text><text class="sub" x="62" y="225" text-anchor="middle">Spring Boot source</text>
+                <rect class="node" x="140" y="190" width="112" height="46" rx="10"/><text class="k" x="196" y="210" text-anchor="middle">Eval harness</text><text class="sub" x="196" y="225" text-anchor="middle">golden set of 11</text>
+                <rect class="node" x="270" y="190" width="112" height="46" rx="10"/><text class="k" x="326" y="210" text-anchor="middle">Scores</text><text class="sub" x="326" y="225" text-anchor="middle">recall@k, MRR</text>
+                <path class="arrow" d="M118 33 H 134"/>
+                <path class="arrow" d="M252 33 H 264"/>
+                <path class="arrow both" d="M342 62 V 94"/>
+                <path class="arrow" d="M296 56 C 296 78, 196 74, 196 94"/>
+                <path class="arrow" d="M140 123 H 124"/>
+                <path class="arrow" d="M62 146 V 184"/>
+                <path class="arrow" d="M196 190 V 152"/>
+                <text class="sub" x="204.0" y="172" text-anchor="start">retrieval eval</text>
+                <path class="arrow" d="M252 213 H 264"/>
+              </svg>
+            </figure>
             <p class="stack">Python, Amazon Bedrock AgentCore, Strands Agents SDK, Ollama</p>
           </article>
 
@@ -493,6 +586,30 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
             </figure>
             <h3><a href="https://github.com/pragathigopal7/llm-eval-harness">LLM eval harness</a></h3>
             <p>A dependency-free Python harness that runs a model over a test set, scores each answer with reference metrics or an LLM judge, tracks latency, tokens, and cost, and fails CI when a prompt or model change makes results worse.</p>
+            <figure class="arch">
+              <figcaption>Architecture</figcaption>
+              <svg class="dia" viewBox="0 0 400 246" role="img" aria-label="A JSONL dataset feeds a concurrent runner that calls a model provider; answers go to scorers that use reference metrics or an LLM judge; results become a run report with confidence intervals, are compared against a saved baseline, and a CI gate fails the build on regression and posts the report to the job summary">
+                
+                <rect class="node" x="6" y="10" width="112" height="46" rx="10"/><text class="k" x="62" y="30" text-anchor="middle">Dataset</text><text class="sub" x="62" y="45" text-anchor="middle">JSONL test cases</text>
+                <rect class="node" x="140" y="10" width="112" height="46" rx="10"/><text class="k" x="196" y="30" text-anchor="middle">Runner</text><text class="sub" x="196" y="45" text-anchor="middle">concurrent, retries</text>
+                <rect class="node" x="270" y="10" width="112" height="46" rx="10"/><text class="k" x="326" y="30" text-anchor="middle">Model provider</text><text class="sub" x="326" y="45" text-anchor="middle">Anthropic, OpenAI</text>
+                <rect class="node" x="140" y="100" width="112" height="46" rx="10"/><text class="k" x="196" y="120" text-anchor="middle">Scorers</text><text class="sub" x="196" y="135" text-anchor="middle">reference metrics</text>
+                <rect class="node" x="270" y="100" width="112" height="46" rx="10"/><text class="k" x="326" y="120" text-anchor="middle">LLM judge</text><text class="sub" x="326" y="135" text-anchor="middle">rubric, 1 to 5</text>
+                <rect class="node" x="6" y="100" width="112" height="46" rx="10"/><text class="k" x="62" y="120" text-anchor="middle">Run report</text><text class="sub" x="62" y="135" text-anchor="middle">pass rate + CI</text>
+                <rect class="node" x="6" y="190" width="112" height="46" rx="10"/><text class="k" x="62" y="210" text-anchor="middle">Compare</text><text class="sub" x="62" y="225" text-anchor="middle">vs baseline.json</text>
+                <rect class="node bad" x="140" y="190" width="112" height="46" rx="10"/><text class="k" x="196" y="210" text-anchor="middle">CI gate</text><text class="sub" x="196" y="225" text-anchor="middle">exit 1 on drop</text>
+                <rect class="node" x="270" y="190" width="112" height="46" rx="10"/><text class="k" x="326" y="210" text-anchor="middle">Job summary</text><text class="sub" x="326" y="225" text-anchor="middle">report on the PR</text>
+                <path class="arrow" d="M118 33 H 134"/>
+                <path class="arrow both" d="M258 33 H 264"/>
+                <path class="arrow" d="M196 56 V 94"/>
+                <text class="sub" x="204.0" y="82" text-anchor="start">answers</text>
+                <path class="arrow both" d="M258 123 H 264"/>
+                <path class="arrow" d="M140 123 H 124"/>
+                <path class="arrow" d="M62 146 V 184"/>
+                <path class="arrow" d="M118 213 H 134"/>
+                <path class="arrow" d="M252 213 H 264"/>
+              </svg>
+            </figure>
             <p class="stack">Python standard library, Anthropic and OpenAI compatible APIs</p>
           </article>
 
