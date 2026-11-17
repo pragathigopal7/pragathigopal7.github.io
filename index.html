@@ -410,6 +410,58 @@ footer { padding: 40px 0 56px; color: var(--muted); font-size: 0.95rem; border-t
 
           <article class="proj">
             <figure class="schem">
+              <svg class="dia" viewBox="0 0 400 130" role="img" aria-label="paved new generates a service that already emits logs, metrics and traces; a policy check in CI blocks non compliant manifests in the pull request, and compliant services deploy to EKS">
+                <rect class="node" x="6" y="34" width="96" height="48" rx="10"/>
+                <text class="k" x="54" y="55" text-anchor="middle">paved new</text>
+                <text x="54" y="71" text-anchor="middle">template</text>
+                <path class="arrow" d="M102 58 H 124"/>
+                <rect class="node" x="130" y="26" width="92" height="64" rx="10"/>
+                <text class="k" x="176" y="47" text-anchor="middle">service</text>
+                <circle class="a" cx="156" cy="68" r="6"/><circle class="b" cx="176" cy="68" r="6"/><circle class="c" cx="196" cy="68" r="6"/>
+                <text x="176" y="110" text-anchor="middle">logs, metrics, traces</text>
+                <line class="wire" x1="222" y1="58" x2="236" y2="58"/>
+                <line class="gate" x1="242" y1="34" x2="242" y2="84"/>
+                <text x="236" y="22" text-anchor="middle">paved check</text>
+                <path class="badpath" d="M242 84 Q 242 112 254 112"/>
+                <circle class="bad" cx="262" cy="112" r="6"/>
+                <text class="stopt" x="274" y="117">blocked in PR</text>
+                <path class="arrow" d="M248 58 H 274"/>
+                <rect class="tx" x="280" y="16" width="114" height="86" rx="12"/>
+                <rect class="node" x="292" y="32" width="26" height="30" rx="6"/><circle class="b" cx="305" cy="47" r="4"/>
+                <rect class="node" x="324" y="32" width="26" height="30" rx="6"/><circle class="b" cx="337" cy="47" r="4"/>
+                <rect class="node" x="356" y="32" width="26" height="30" rx="6"/><circle class="b" cx="369" cy="47" r="4"/>
+                <text x="337" y="88" text-anchor="middle">EKS</text>
+              </svg>
+            </figure>
+            <h3><a href="https://github.com/pragathigopal7/paved-road">Paved road platform on EKS</a></h3>
+            <p>An internal developer platform where the easy path is the secure, observable one. A CLI scaffolds services with structured logs, metrics, traces, health checks, and a restricted security context already wired in, and a policy gate in CI keeps them that way. Terraform builds the network, cluster, and keyless GitHub OIDC roles; a Pulumi layer onboards teams with namespaces, quotas, image repositories, and their own autoscaling GitHub Actions runners on spot nodes. Every alert links to a runbook, and an MCP server gives AI assistants the same tools.</p>
+            <figure class="arch">
+              <figcaption>Architecture</figcaption>
+              <svg class="dia" viewBox="0 0 400 246" role="img" aria-label="The paved CLI scaffolds a service; its reusable CI pipeline runs tests and the policy gate and pushes the image to ECR through OIDC; Terraform builds the VPC, EKS and IAM roles, Pulumi adds team tenancy and add-ons, and services run on EKS; telemetry flows to the OpenTelemetry collector, then Prometheus with SLO burn rate alerts, and each alert links to a runbook">
+                <rect class="node" x="6" y="10" width="112" height="46" rx="10"/><text class="k" x="62" y="30" text-anchor="middle">paved CLI</text><text class="sub" x="62" y="45" text-anchor="middle">new, check, MCP</text>
+                <rect class="node" x="140" y="10" width="112" height="46" rx="10"/><text class="k" x="196" y="30" text-anchor="middle">Service CI</text><text class="sub" x="196" y="45" text-anchor="middle">tests, policy gate</text>
+                <rect class="node" x="270" y="10" width="112" height="46" rx="10"/><text class="k" x="326" y="30" text-anchor="middle">ECR</text><text class="sub" x="326" y="45" text-anchor="middle">OIDC push, no keys</text>
+                <rect class="node" x="6" y="100" width="112" height="46" rx="10"/><text class="k" x="62" y="120" text-anchor="middle">Terraform</text><text class="sub" x="62" y="135" text-anchor="middle">VPC, EKS, IAM</text>
+                <rect class="node" x="140" y="100" width="112" height="46" rx="10"/><text class="k" x="196" y="120" text-anchor="middle">Pulumi</text><text class="sub" x="196" y="135" text-anchor="middle">tenancy, runners</text>
+                <rect class="node db" x="270" y="100" width="112" height="46" rx="10"/><text class="k" x="326" y="120" text-anchor="middle">EKS</text><text class="sub" x="326" y="135" text-anchor="middle">restricted pods</text>
+                <rect class="node" x="270" y="190" width="112" height="46" rx="10"/><text class="k" x="326" y="210" text-anchor="middle">OTel collector</text><text class="sub" x="326" y="225" text-anchor="middle">OTLP, k8s metadata</text>
+                <rect class="node" x="140" y="190" width="112" height="46" rx="10"/><text class="k" x="196" y="210" text-anchor="middle">Prometheus</text><text class="sub" x="196" y="225" text-anchor="middle">SLO burn rates</text>
+                <rect class="node" x="6" y="190" width="112" height="46" rx="10"/><text class="k" x="62" y="210" text-anchor="middle">Runbooks</text><text class="sub" x="62" y="225" text-anchor="middle">one per alert</text>
+                <path class="arrow" d="M118 33 H 134"/>
+                <path class="arrow" d="M252 33 H 264"/>
+                <path class="arrow" d="M326 56 V 94"/>
+                <path class="arrow" d="M118 123 H 134"/>
+                <path class="arrow" d="M252 123 H 264"/>
+                <path class="arrow" d="M326 146 V 184"/>
+                <path class="arrow" d="M270 213 H 258"/>
+                <path class="arrow" d="M140 213 H 124"/>
+              </svg>
+            </figure>
+            <p class="stack">Python, Terraform, Pulumi, AWS EKS, GitHub Actions, OpenTelemetry, Prometheus, Kafka, MCP</p>
+          </article>
+
+          <article class="proj">
+            <figure class="schem">
               <svg class="dia" viewBox="0 0 400 130" role="img" aria-label="Events pass a schema check, malformed ones are rejected, and the rest are refined from bronze to silver to gold tables">
                 <line class="wire" x1="6" y1="58" x2="96" y2="58"/>
                 <circle class="a" cx="16" cy="58" r="6"/><circle class="b" cx="36" cy="58" r="6"/><circle class="c" cx="56" cy="58" r="6"/><circle class="a" cx="76" cy="58" r="6"/>
